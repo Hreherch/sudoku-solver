@@ -26,36 +26,12 @@ def findNextEmpty(board, row, col):
             if not currentSquare:
                 return newRow, newCol
 
-# should ensure board is validated before passing in
-def solveBoard(board, row=0, col=0):
-    board = copy(board)
-
-    # find next empty space (from specified row and col)
-    result = findNextEmpty(board, row, col)
-    if not result:
-        print("did it solve?", board)
-        return board
-    else:
-        newRow, newCol = result
-
-    # place a value and validate it
-    result = False
-    for number in range(1, 9+1):
-        board[newRow][newCol] = number
-        # validate(board)
-        result = solveBoard(board, newRow, newCol)
-        # if result != False:
-        #     break
-    return result
-
-print("solution:", solveBoard(board))
-
 ## End
 
 
 ## I will write code between these lines only :p
 
-def cellIsValid(x, y, value):
+def cellIsValid(x, y, value, board):
     isValid = True
     print(x, y, value)
 
@@ -98,7 +74,26 @@ def cellIsValid(x, y, value):
 
     return isValid
 
-# print(cellIsValid(2, 7, 1))
-# print(cellIsValid(8, 0, 2))
-print(cellIsValid(1, 2, 1))
-##
+# should ensure board is validated before passing in
+def solveBoard(board, row=0, col=0):
+    board = copy(board)
+
+    # find next empty space (from specified row and col)
+    result = findNextEmpty(board, row, col)
+    if not result:
+        return board
+    else:
+        newRow, newCol = result
+
+    # place a value and validate it
+    result = False
+    for number in range(1, 9+1):
+        if not cellIsValid(newRow, newCol, number, board):
+            continue
+        board[newRow][newCol] = number
+        result = solveBoard(board, newRow, newCol)
+        if isinstance(result, type(board)):
+            break
+    return result
+
+print("solution:", solveBoard(board))
