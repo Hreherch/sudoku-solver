@@ -1,5 +1,5 @@
 import sys
-import numpy
+from numpy import copy
 
 print(sys.argv)
 
@@ -13,8 +13,43 @@ for lineNum in range(len(f)):
         board[lineNum][charNum] = int(ch) if ch != "." else None
 
 ## I'm going to write code between these lines only :p
-board = numpy.copy(board)
+board = copy(board)
 print(board)
+
+# find next empty space (from specified row and col)
+def findNextEmpty(board, row, col):
+    for newRow in range(row, 9):
+        # can't search earlier than col if on row
+        minCol = col if newRow == row else 0
+        for newCol in range(minCol, 9):
+            currentSquare = board[newRow][newCol]
+            if not currentSquare:
+                return newRow, newCol
+
+# should ensure board is validated before passing in
+def solveBoard(board, row=0, col=0):
+    board = copy(board)
+
+    # find next empty space (from specified row and col)
+    result = findNextEmpty(board, row, col)
+    if not result:
+        print("did it solve?", board)
+        return board
+    else:
+        newRow, newCol = result
+
+    # place a value and validate it
+    result = False
+    for number in range(1, 9+1):
+        board[newRow][newCol] = number
+        # validate(board)
+        result = solveBoard(board, newRow, newCol)
+        # if result != False:
+        #     break
+    return result
+
+print("solution:", solveBoard(board))
+
 ## End
 
 
