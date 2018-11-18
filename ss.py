@@ -1,4 +1,5 @@
 import sys
+import numpy
 
 print(sys.argv)
 
@@ -15,5 +16,6 @@ for line in board:
     print(line)
 
 ## I'm going to write code between these lines only :p
-
+board = numpy.copy(board)
+print(board)
 ## End
