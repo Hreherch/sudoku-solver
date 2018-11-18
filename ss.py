@@ -14,11 +14,6 @@ for lineNum in range(len(f)):
 for line in board:
     print(line)
 
-# for line in f:
-#     line = line.strip()
-#     for ch in line:
-#         board[][] = ch
+## I'm going to write code between these lines only :p
 
-
-
-f.close()
+## End
