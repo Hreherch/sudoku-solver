@@ -75,6 +75,20 @@ def solveBoard(board, row = 0, col = 0):
             break
     return result
 
+def transposeBoard(board, reflectX, reflectY):
+    boardCopy = copy(board)
+    for i in range(len(board)):
+        tempRow = copy(board[i])
+        if reflectX:
+            for j in range(len(board[i])):
+                tempRow[len(board[i]) - j - 1] = board[i][j]
+        if reflectY:
+            boardCopy[len(board) - i - 1] = tempRow
+        else:
+            boardCopy[i] = tempRow
+
+    return boardCopy
+
 def main():
     if len(sys.argv) > 2:
         print("Expects one argument: filename")
@@ -88,12 +102,32 @@ def main():
 
     board = [[None] * 9 for x in range(9)]
 
+    clueCount = [0] * 4
     for lineNum in range(len(f)):
         for charNum in range(len(f[lineNum])):
             ch = f[lineNum][charNum]
+            if ch != ".":
+                if lineNum <= 4:
+                    if charNum <= 4:
+                        clueCount[0] += 1
+                    if charNum >=4:
+                        clueCount[1] += 1
+                if lineNum >= 4:
+                    if charNum <= 4:
+                        clueCount[2] += 1
+                    if charNum >=4:
+                        clueCount[3] += 1
             board[lineNum][charNum] = int(ch) if ch != "." else None
 
-    print("solution:\n", solveBoard(board))
+    maxIndex = clueCount.index(max(clueCount))
+
+    reflectX = False if maxIndex % 2 == 0 else True
+    reflectY = False if maxIndex // 2 == 0 else True
+    board = transposeBoard(board, reflectX, reflectY)
+
+    solution = solveBoard(board)
+
+    print("SOLUTION:\n", transposeBoard(solution, reflectX, reflectY))
 
 if __name__ == "__main__":
     main()
