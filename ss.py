@@ -75,6 +75,23 @@ def solveBoard(board, row = 0, col = 0):
             break
     return result
 
+"""
+Reflect board on X axis if reflectX is true and on Y axis if reflect Y is true
+"""
+def transposeBoard(board, reflectX, reflectY):
+    boardCopy = copy(board)
+    for i in range(len(board)):
+        tempRow = copy(board[i])
+        if reflectX:
+            for j in range(len(board[i])):
+                tempRow[len(board[i]) - j - 1] = board[i][j]
+        if reflectY:
+            boardCopy[len(board) - i - 1] = tempRow
+        else:
+            boardCopy[i] = tempRow
+
+    return boardCopy
+
 def main():
     if len(sys.argv) > 2:
         print("Expects one argument: filename")
@@ -88,12 +105,46 @@ def main():
 
     board = [[None] * 9 for x in range(9)]
 
+    """
+    clueCount: array that keeps track of how many clues per quadrant where 
+    the quadrants are 5x5 sections of the board that overlap one row and 
+    one column with another quadrant in the order:
+    
+    1 2
+    3 4
+    """
+    clueCount = [0] * 4
+
     for lineNum in range(len(f)):
         for charNum in range(len(f[lineNum])):
             ch = f[lineNum][charNum]
+            # If there is a number in that cell, add to the count in the appropriate quadrant
+            if ch != ".":
+                if lineNum <= 4:
+                    if charNum <= 4:
+                        clueCount[0] += 1
+                    if charNum >=4:
+                        clueCount[1] += 1
+                if lineNum >= 4:
+                    if charNum <= 4:
+                        clueCount[2] += 1
+                    if charNum >=4:
+                        clueCount[3] += 1
+            # Add to the board
             board[lineNum][charNum] = int(ch) if ch != "." else None
 
-    print("solution:\n", solveBoard(board))
+    # Get the index of the quadrant with the highest clue count
+    maxIndex = clueCount.index(max(clueCount))
+
+    # Reflect on X and Y axis as necessary based on quadrant we want to move to top left position
+    reflectX = False if maxIndex % 2 == 0 else True
+    reflectY = False if maxIndex // 2 == 0 else True
+    board = transposeBoard(board, reflectX, reflectY)
+
+    solution = solveBoard(board)
+
+    # Transpose board back to the original board by reflecting it in the same way we did previously
+    print("SOLUTION:\n", transposeBoard(solution, reflectX, reflectY))
 
 if __name__ == "__main__":
     main()
