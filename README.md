@@ -5,4 +5,4 @@ Anti-backtracking Sudoku puzzle example [Wikipedia](https://en.wikipedia.org/wik
 
 Some Sample Sudoku [WebSudoku](https://www.websudoku.com)
 
-Some others? [Warwick University](https://warwick.ac.uk/fac/sci/moac/people/students/peter_cock/python/sudoku/)
+Some others? [Warwick University](https://warwick.ac.uk/fac/sci/moac/people/students/peter_cock/python/sudoku/) (we looked at this after we had finished, but we didn't actually take any ideas from it).
